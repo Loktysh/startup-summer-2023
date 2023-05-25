@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Card, Text, useMantineTheme, createStyles } from '@mantine/core';
 import { ReactComponent as Star } from '../../../assets/star.svg';
 import { css } from '@emotion/react';
+import { getFavouriteVacancies, toggleFavourite } from '../../../utils/favourites';
+import { useNavigate } from 'react-router-dom';
 
 export const VacancyCard = ({
   id,
@@ -12,25 +14,26 @@ export const VacancyCard = ({
   type_of_work,
   payment_to,
   payment_from,
-  currency
+  currency,
 }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavourite] = useState((() => getFavouriteVacancies().includes(id))());
+  const navigate = useNavigate();
   const theme = useMantineTheme();
-  const handleToggleFavorite = () => {
-    setIsFavorite(prevIsFavorite => !prevIsFavorite);
-  };
-
+  console.log(getFavouriteVacancies().includes(id));
   const starStyles = css`
-    stroke: ${theme.colors.gray[5]};
-    color: ${isFavorite ? `${theme.colors.blue[5]}` : `${theme.colors.blue[5]}`};
+    ${isFavorite
+      ? `stroke: ${theme.colors.blue[5]};fill:${theme.colors.blue[5]};`
+      : `stroke: ${theme.colors.gray[5]};fill: none;
+    color: none;`}
     &:hover {
       cursor: pointer;
-      stroke: ${theme.colors.blue[5]};
+      fill: ${isFavorite ? 'none' : theme.colors.blue[5]};
+      stroke: ${theme.colors.blue[5]};fill:${theme.colors.blue[5]};
     }
   `;
   return (
     <Card
-      onClick={() => console.log('123')}
+      onClick={() => navigate(`/vacancies/${id}`)}
       style={{
         cursor: 'pointer',
       }}
@@ -42,7 +45,11 @@ export const VacancyCard = ({
         </Text>
         <Star
           css={starStyles}
-          onClick={handleToggleFavorite}
+          onClick={e => {
+            e.stopPropagation();
+            setIsFavourite(!isFavorite);
+            toggleFavourite(id);
+          }}
           size={20}
         />
       </div>

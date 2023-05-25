@@ -58,7 +58,7 @@ const SearchPage = () => {
       ) : (
         vacanciesData.objects &&
         vacanciesData.objects.map((data, i) => (
-          <VacancyCard
+          <VacancyCard key={i}
             {...data}
           />
         ))

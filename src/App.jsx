@@ -9,7 +9,7 @@ function App() {
           <Route index element={<SearchPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="favourite" element={<FavouritePage />} />
-          <Route path="vacancy" element={<VacancyPage />} />
+          <Route path="vacancies/:id" element={<VacancyPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
