@@ -31,6 +31,7 @@ const SearchFilter = ({handleChange, handleSearch}) => {
         label="Отрасль"
         placeholder="Выберете отрасль "
         data={data.map(item => ({ value: item.key, label: item.title }))}
+        onChange={e => handleChange({catalogues: e})}
       />
       <NumberInput onChange={e => handleChange({payment_from: e})} min={0} placeholder="От" label="Оклад" />
       <NumberInput onChange={e => handleChange({payment_to: e})} min={0} placeholder="До" />

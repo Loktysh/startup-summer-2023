@@ -2,28 +2,27 @@ import React, { useRef, useState, useEffect, useContext, createContext } from 'r
 import { TextInput, Button, Pagination, Stack, Loader } from '@mantine/core';
 import SearchFilter from '../../common/SearchFilter/SearchFilter';
 import { VacancyCard } from '../../common/VacancyCard/VacancyCard';
-import { getVacancies } from '../../../utils';
-import { Await } from 'react-router-dom';
+import { fetchVacancies } from '../../../utils';
 
 const SearchPage = () => {
   const [loading, setLoading] = useState(false);
   const [vacanciesData, setVacanciesData] = useState({});
-  const [activePage, setPage] = useState(1);
+  const [activePage, setPage] = useState(0);
   const [searchParams, setSearchParams] = useState({
     published: 1,
     count: 4,
-    page: activePage - 1,
     sort_new: '',
     no_agreement: 1,
   });
   const searchInput = useRef(null);
   useEffect(() => {
     handleSearch();
-  }, []);
+  }, [activePage]);
   const handleSearch = async () => {
     setLoading(true);
     try {
-      const data = await getVacancies(searchParams);
+      const data = await fetchVacancies({ ...searchParams, page: activePage});
+      console.log(searchParams);
       setVacanciesData(data);
     } catch (error) {
       console.error('Error:', error);
@@ -50,20 +49,22 @@ const SearchPage = () => {
         }
       />
       ;
-      <Pagination value={activePage} onChange={setPage} total={10} />
       {JSON.stringify(searchParams, null, 2)}
-      <div></div>
       {loading ? (
         <Loader variant="dots" />
       ) : (
-        vacanciesData.objects &&
-        vacanciesData.objects.map((data, i) => (
-          <VacancyCard key={i}
-            {...data}
-          />
-        ))
+        <>
+          {vacanciesData.objects &&
+            vacanciesData.objects.map((data, i) => <VacancyCard key={i} {...data} />)}
+          {vacanciesData.total > 4 && (
+            <Pagination
+              value={activePage + 1}
+              onChange={e => setPage(e - 1)}
+              total={Math.round(vacanciesData.total / 4)}
+            />
+          )}
+        </>
       )}
-      {/* <SearchResult></SearchResult> */}
     </>
   );
 };

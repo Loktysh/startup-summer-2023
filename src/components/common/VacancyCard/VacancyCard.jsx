@@ -19,7 +19,6 @@ export const VacancyCard = ({
   const [isFavorite, setIsFavourite] = useState((() => getFavouriteVacancies().includes(id))());
   const navigate = useNavigate();
   const theme = useMantineTheme();
-  console.log(getFavouriteVacancies().includes(id));
   const starStyles = css`
     ${isFavorite
       ? `stroke: ${theme.colors.blue[5]};fill:${theme.colors.blue[5]};`

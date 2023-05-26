@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, } from 'react-router-dom';
 import { Loader } from '@mantine/core';
-import { getVacancies } from '../../../utils';
+import { fetchVacancies } from '../../../utils';
 
 const VacancyPage = () => {
   const { id } = useParams();
@@ -11,7 +11,7 @@ const VacancyPage = () => {
     async function fetchData() {
       setLoading(true);
       try {
-        const result = await getVacancies({ id: '123' });
+        const result = await fetchVacancies({ id: '123' });
         setData(result);
       } catch (error) {
         console.error('Error:', error);
