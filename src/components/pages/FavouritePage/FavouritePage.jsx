@@ -4,16 +4,17 @@ import SearchFilter from '../../common/SearchFilter/SearchFilter';
 import { VacancyCard } from '../../common/VacancyCard/VacancyCard';
 import { fetchVacancies } from '../../../utils';
 import { getFavouriteVacancies } from '../../../utils/favourites';
+import { NotFound } from '../../common/NotFound/NotFound';
 
 const FavouritePage = () => {
   const [loading, setLoading] = useState(false);
   const [activePage, setPage] = useState(1);
-  const [vacanciesData, setVacanciesData] = useState({});
+  const [vacanciesData, setVacanciesData] = useState(null);
+  
   useEffect(() => {
+    console.log('rerender');
     const ids = getFavouriteVacancies();
-    console.log(ids);
     let params = {};
-    ids.forEach((e, i) => (params[`ids[${i}]`] = e));
     params = {
       ...params,
       count: 4,
@@ -30,27 +31,35 @@ const FavouritePage = () => {
         setLoading(false);
       }
     }
-    fetchData();
+    if (ids.length) {
+      console.log(ids);
+      ids.forEach((e, i) => (params[`ids[${i}]`] = e));
+      fetchData();
+    }
   }, [activePage]);
-  return (
-    <>
-      {loading ? (
-        <Loader variant="dots" />
-      ) : (
-        <>
-          {vacanciesData.objects &&
-            vacanciesData.objects.map((data, i) => <VacancyCard key={i} {...data} />)}
-          {vacanciesData.total > 4 && (
-            <Pagination
-              value={activePage}
-              onChange={e => setPage(e)}
-              total={Math.round(vacanciesData.total / 4)}
-            />
-          )}
-        </>
-      )}
-    </>
-  );
+  if (vacanciesData) {
+    return (
+      <>
+        {loading ? (
+          <Loader variant="dots" />
+        ) : (
+            <>
+            {vacanciesData.objects &&
+              vacanciesData.objects.map((data, i) => <VacancyCard key={i} {...data} />)}
+            {vacanciesData.total > 4 && (
+              <Pagination
+                value={activePage}
+                onChange={e => setPage(e)}
+                total={Math.round(vacanciesData.total / 4)}
+              />
+            )}
+          </>
+        )}
+      </>
+    ) 
+  } else {
+      return <NotFound />
+  }
 };
 
 export default FavouritePage;

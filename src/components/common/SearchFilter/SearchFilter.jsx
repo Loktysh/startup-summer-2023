@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Select, NumberInput, Stack, Button } from '@mantine/core';
-import styles from './SearchFilter.module.css';
+import { Select, NumberInput, Stack, Button, Text } from '@mantine/core';
 import { getCategoryList } from '../../../utils';
 
-const SearchFilter = ({handleChange, handleSearch}) => {
+const SearchFilter = ({handleChange, handleSearch, resetFilters}) => {
   const [data, setData] = useState([]);
-  const [filterValues, setFilterValues] = useState([]);
-  const [minSalary, setMinSalary] = useState(null);
-  const [maxSalary, setMaxSalary] = useState(null);
   useEffect(() => {
     getCategoryList('https://api.example.com/data')
       .then(res => setData(res))
-      .then(res => {
-        // console.log(res && res[0]);
-      });
   });
   return (
     <Stack
@@ -27,6 +20,7 @@ const SearchFilter = ({handleChange, handleSearch}) => {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
       })}
     >
+      <Text style={{cursor: 'pointer'}} onClick={resetFilters} fz="sm">Сбросить все</Text>
       <Select
         label="Отрасль"
         placeholder="Выберете отрасль "

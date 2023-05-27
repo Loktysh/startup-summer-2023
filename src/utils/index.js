@@ -7328,7 +7328,7 @@ const ret = {
 export async function fetchVacancies(params) {
   const url = new URL('https://startup-summer-2023-proxy.onrender.com/2.0/vacancies');
   url.search = new URLSearchParams(params).toString();
-  console.log('1',url.search);
+  // console.log('1',url.search);
   try {
     const response = await fetch(url, {
       method: 'GET',

@@ -10,9 +10,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <MantineProvider
-        withGlobalStyles
+        
         theme={{
-          colorScheme: 'light',
+          colorScheme: 'light',         
           colors: {
             blue: ['#deebff', '#deebff', '#c9e0ff', '#b7d6ff', '#92c1ff', '#5e96fc', '#3b7cd3'],
             white: [' #ffffff'],
@@ -26,6 +26,17 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           radius: {
             sm: '8px',
           },
+
+          components: {
+            Header: {
+              styles: {
+                root: { borderBottom: 'none' },
+              },
+            },
+            Body: {
+              background: '#F7F7F8 !important',
+            },
+          },
           input: {
             borderColor: 'gray-2',
             borderWidth: '1px',
@@ -37,6 +48,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           //   },
           // },
         }}
+        withGlobalStyles
+       
       >
         <App />
       </MantineProvider>

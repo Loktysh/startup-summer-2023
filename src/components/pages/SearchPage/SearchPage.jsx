@@ -3,25 +3,22 @@ import { TextInput, Button, Pagination, Stack, Loader } from '@mantine/core';
 import SearchFilter from '../../common/SearchFilter/SearchFilter';
 import { VacancyCard } from '../../common/VacancyCard/VacancyCard';
 import { fetchVacancies } from '../../../utils';
+import { defaultSearchParams } from '../../../constants';
 
 const SearchPage = () => {
   const [loading, setLoading] = useState(false);
   const [vacanciesData, setVacanciesData] = useState({});
   const [activePage, setPage] = useState(0);
-  const [searchParams, setSearchParams] = useState({
-    published: 1,
-    count: 4,
-    sort_new: '',
-    no_agreement: 1,
-  });
+  const [searchParams, setSearchParams] = useState(defaultSearchParams);
+  const [resetComponent, setResetComponent] = useState(false);
   const searchInput = useRef(null);
   useEffect(() => {
     handleSearch();
-  }, [activePage]);
+  }, [activePage, resetComponent]);
   const handleSearch = async () => {
     setLoading(true);
     try {
-      const data = await fetchVacancies({ ...searchParams, page: activePage});
+      const data = await fetchVacancies({ ...searchParams, page: activePage });
       console.log(searchParams);
       setVacanciesData(data);
     } catch (error) {
@@ -33,9 +30,18 @@ const SearchPage = () => {
   const handleChange = param => {
     setSearchParams({ ...searchParams, ...param });
   };
+  const resetFilters = () => {
+    setResetComponent(e => !e);
+    setSearchParams({ ...defaultSearchParams });
+    setPage(0);
+  };
   return (
     <>
-      <SearchFilter handleChange={handleChange} handleSearch={handleSearch}></SearchFilter>
+      <SearchFilter
+        handleChange={handleChange}
+        handleSearch={handleSearch}
+        resetFilters={resetFilters}
+      />
       <TextInput
         ref={searchInput}
         onChange={e => setSearchParams({ ...searchParams, keyword: e.target.value })}
@@ -48,8 +54,7 @@ const SearchPage = () => {
           </Button>
         }
       />
-      ;
-      {JSON.stringify(searchParams, null, 2)}
+      ;{JSON.stringify(searchParams, null, 2)}
       {loading ? (
         <Loader variant="dots" />
       ) : (
