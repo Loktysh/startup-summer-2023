@@ -15,6 +15,7 @@ export const VacancyCard = ({
   payment_to,
   payment_from,
   currency,
+  titleColor,
 }) => {
   const [isFavorite, setIsFavourite] = useState((() => getFavouriteVacancies().includes(id))());
   const navigate = useNavigate();
@@ -27,7 +28,8 @@ export const VacancyCard = ({
     &:hover {
       cursor: pointer;
       fill: ${isFavorite ? 'none' : theme.colors.blue[5]};
-      stroke: ${theme.colors.blue[5]};fill:${theme.colors.blue[5]};
+      stroke: ${theme.colors.blue[5]};
+      fill: ${theme.colors.blue[5]};
     }
   `;
   return (
@@ -36,10 +38,10 @@ export const VacancyCard = ({
       style={{
         cursor: 'pointer',
       }}
-      data-elem={`vacancy-_vacancy_id_${id}`}
+      data-elem={`vacancy-${id}`}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text size="lg" weight={700} style={{ marginBottom: '0.5rem' }}>
+        <Text size="lg" weight={600} color={titleColor}>
           {profession}
         </Text>
         <Star
@@ -50,20 +52,15 @@ export const VacancyCard = ({
             toggleFavourite(id);
           }}
           size={20}
+          data-elem={`vacancy-${id}-shortlist-button`}
         />
       </div>
-      <Text size="sm" style={{ marginBottom: '0.5rem' }}>
-        {firm_name}
+      <Text size="sm">{firm_name}</Text>
+      <Text size="sm" fw={600}>
+        з/п от {payment_from}{payment_to && '-' + payment_to} {currency}
       </Text>
-      <Text size="sm" style={{ marginBottom: '0.5rem' }}>
-        Город: {town.title}
-      </Text>
-      <Text size="sm" style={{ marginBottom: '0.5rem' }}>
-        Тип занятости: {type_of_work.title}
-      </Text>
-      <Text size="sm">
-        Оклад: {payment_from} - {payment_to} {currency}
-      </Text>
+      <Text size="sm">{type_of_work.title}</Text>
+      <Text size="sm">{town.title}</Text>
     </Card>
   );
 };

@@ -42,34 +42,37 @@ const SearchPage = () => {
         handleSearch={handleSearch}
         resetFilters={resetFilters}
       />
-      <TextInput
-        ref={searchInput}
-        onChange={e => setSearchParams({ ...searchParams, keyword: e.target.value })}
-        label="Your email"
-        placeholder="Введите название вакансии"
-        rightSectionWidth="fit-content"
-        rightSection={
-          <Button size="xs" onClick={handleSearch} data-elem="search-button">
-            Поиск
-          </Button>
-        }
-      />
-      ;{JSON.stringify(searchParams, null, 2)}
-      {loading ? (
-        <Loader variant="dots" />
-      ) : (
-        <>
-          {vacanciesData.objects &&
-            vacanciesData.objects.map((data, i) => <VacancyCard key={i} {...data} />)}
-          {vacanciesData.total > 4 && (
-            <Pagination
-              value={activePage + 1}
-              onChange={e => setPage(e - 1)}
-              total={Math.round(vacanciesData.total / 4)}
-            />
-          )}
-        </>
-      )}
+      <Stack spacing={16}>
+        <TextInput
+          ref={searchInput}
+          onChange={e => setSearchParams({ ...searchParams, keyword: e.target.value })}
+          label="Your email"
+          placeholder="Введите название вакансии"
+          rightSectionWidth="fit-content"
+          data-elem="search-input"
+          rightSection={
+            <Button size="xs" onClick={handleSearch} data-elem="search-button">
+              Поиск
+            </Button>
+          }
+        />
+        {loading ? (
+          <Loader variant="dots" />
+        ) : (
+          <>
+            {vacanciesData.objects &&
+                vacanciesData.objects.map((data, i) => <VacancyCard key={i} {...data} titleColor={'blue'} />)}
+            {vacanciesData.total > 4 && (
+              <Pagination
+                value={activePage + 1}
+                onChange={e => setPage(e - 1)}
+                  total={Math.round(vacanciesData.total / 4)}
+                  pt={24}
+              />
+            )}
+          </>
+        )}
+      </Stack>
     </>
   );
 };

@@ -27,8 +27,8 @@ const SearchFilter = ({handleChange, handleSearch, resetFilters}) => {
         data={data.map(item => ({ value: item.key, label: item.title }))}
         onChange={e => handleChange({catalogues: e})}
       />
-      <NumberInput onChange={e => handleChange({payment_from: e})} min={0} placeholder="От" label="Оклад" />
-      <NumberInput onChange={e => handleChange({payment_to: e})} min={0} placeholder="До" />
+      <NumberInput onChange={e => handleChange({payment_from: e})} min={0} placeholder="От" label="Оклад" data-elem='salary-from-input'/>
+      <NumberInput onChange={e => handleChange({payment_to: e})} min={0} placeholder= "До" data-elem='salary-to-input'/>
       <Button onClick={handleSearch} data-elem='search-button'>Применить</Button>
     </Stack>
 
