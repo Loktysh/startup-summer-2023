@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
-// import './styles/normalize.css';
-import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
 
@@ -11,20 +9,20 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <MantineProvider
         withGlobalStyles
+        withNormalizeCSS
         theme={{
-          globalStyles: (theme) => ({
+          globalStyles: theme => ([{
             body: {
               background: '#F7F7F8',
-            }
-          }),
+            },
+          }]),
+          fontFamily: 'Inter',
           colorScheme: 'light',
           white: '#ffffff',
           black: '#232134',
           colors: {
             blue: ['#deebff', '#deebff', '#c9e0ff', '#b7d6ff', '#92c1ff', '#5e96fc', '#3b7cd3'],
-            // white: [' #ffffff'],
             gray: ['#f5f5f6', '#eaebed', '#d5d6dc', '#ACADB9', '#ACADB9', '#7b7c88', '#232134'],
-            // black: ['#232134'],
           },
           primaryShade: {
             light: 5,
@@ -36,6 +34,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           },
           radius: {
             sm: '8px',
+            ml: '12px',
           },
           fontSizes: {
             xs: '0.875rem',
@@ -45,41 +44,87 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             xl: '1.5rem',
           },
           components: {
-            // Text: {
-            //   defaultProps: (theme) => ({
-            //     color: theme.colors.black,
-            //   })
-            // },
             Header: {
               styles: {
                 root: { borderBottom: 'none' },
               },
             },
-            // Body: {
-            //   styles: {
-            //     root: {  background: '#F7F7F8' },
-            //   },
-            // },
-            Card: {
-              styles: (theme) => ({
-                root: { maxWidth: '773px', backgroundColor: theme.colors.white, padding: '24px !important', border: '1px solid gray-1' },
+            Input: {
+              styles: theme => ({
+                input: {
+                  border: `1px solid ${theme.colors.gray[2]}`,
+                  placeholderColor: theme.colors.gray[3],
+                  fontSize: theme.fontSizes.xs,
+                },
               }),
-            }
+            },
+            TextInput: {
+              styles: theme => ({
+                input: {
+                  borderColor: theme.colors.gray[1],
+                  height: '3rem',
+                },
+              }),
+            },
+            Button: {
+              styles: theme => ({
+                root: {
+                  fontSize: theme.fontSizes.xs,
+                  fontWeight: '500',
+                  backgroundColor: theme.colors.blue[5],
+                  '&:hover': {
+                    backgroundColor: theme.colors.blue[4],
+                  },
+                  '&:active': {
+                    backgroundColor: theme.colors.blue[6],
+                  }
+                }
+              }),
+            },
+            Select: {
+              styles: theme => ({
+                item: {
+                  fontSize: theme.fontSizes.xs,
+                  '&:hover': {
+                    backgroundColor: theme.colors.blue[0],
+                  },
+                  '&:selected': {
+                    backgroundColor: theme.colors.blue[5],
+                  }
+                },
+               
+              }),
+            },
+            Anchor: {
+              defaultProps: {
+                fz: 'sm',
+              },
+              styles: {
+                root: {
+                  '&:hover': {
+                    textDecoration: 'none',
+                  },
+                }
+              }
+            },
+            Card: {
+              styles: theme => ({
+                root: {
+                  maxWidth: '773px',
+                  backgroundColor: theme.colors.white,
+                  padding: '24px',
+                  border: `1px solid ${theme.colors.gray[1]}`,
+                },
+              }),
+            },
           },
-          input: {
-            borderColor: 'gray-2',
-            borderWidth: '1px',
+          headings: {
+            fontFamily: 'Poppins, sans-serif',
+            sizes: {
+              h1: { fontSize: '1.5rem', fontWeight: '600', letterSpacing: '-0.02em', lineHeight: '36px' },
+            },
           },
-         
-          // headings: {
-          //   fontFamily: 'Roboto, sans-serif',
-          //   sizes: {
-          //     h1: { fontSize: '2rem' },
-          //   },
-          // },
         }}
-       
-       
       >
         <App />
       </MantineProvider>
