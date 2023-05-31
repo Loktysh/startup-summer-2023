@@ -6,8 +6,10 @@ import { getCategoryList } from '../../../utils';
 const SearchFilter = ({ handleChange, handleSearch, resetFilters }) => {
   const [data, setData] = useState([]);
   const [isDropdown, setIsDropdown] = useState(false);
+  const [category, setCategory] = useState();
   const [valueFrom, setValueFrom] = useState();
   const [valueTo, setValueTo] = useState();
+  const inputCategory = useRef(null);
   const inputFrom = useRef(null);
   const inputTo = useRef(null);
   useEffect(() => {
@@ -38,6 +40,7 @@ const SearchFilter = ({ handleChange, handleSearch, resetFilters }) => {
             color: theme.colors.gray[3],
           })}
           onClick={() => {
+            setCategory('')
             setValueFrom(0);
             setValueTo(0);
             resetFilters();
@@ -50,6 +53,8 @@ const SearchFilter = ({ handleChange, handleSearch, resetFilters }) => {
       <Select
         label="Отрасль"
         placeholder="Выберете отрасль "
+        ref={inputCategory}
+        value={category}
         data={data.map(item => ({ value: item.key, label: item.title }))}
         styles={theme => ({
           rightSection: {
