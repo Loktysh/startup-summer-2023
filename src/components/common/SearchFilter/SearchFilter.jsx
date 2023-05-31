@@ -1,9 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Select, NumberInput, Stack, Button, Text, Flex, Input } from '@mantine/core';
+import { IconChevronDown } from '@tabler/icons-react';
 import { getCategoryList } from '../../../utils';
 
 const SearchFilter = ({ handleChange, handleSearch, resetFilters }) => {
   const [data, setData] = useState([]);
+  const [isDropdown, setIsDropdown] = useState(false);
+  const [valueFrom, setValueFrom] = useState();
+  const [valueTo, setValueTo] = useState();
+  const inputFrom = useRef(null);
+  const inputTo = useRef(null);
   useEffect(() => {
     getCategoryList('https://api.example.com/data').then(res => setData(res));
   });
@@ -31,7 +37,11 @@ const SearchFilter = ({ handleChange, handleSearch, resetFilters }) => {
             cursor: 'pointer',
             color: theme.colors.gray[3],
           })}
-          onClick={() => resetFilters()}
+          onClick={() => {
+            setValueFrom(0);
+            setValueTo(0);
+            resetFilters();
+          }}
           fz="sm"
         >
           Сбросить все
@@ -41,23 +51,43 @@ const SearchFilter = ({ handleChange, handleSearch, resetFilters }) => {
         label="Отрасль"
         placeholder="Выберете отрасль "
         data={data.map(item => ({ value: item.key, label: item.title }))}
-        w='100%'
-        onChange={e => handleChange({ catalogues: e })}
+        styles={theme => ({
+          rightSection: {
+            stroke: isDropdown ? theme.colors.blue[5] : theme.colors.gray[3],
+            transform: isDropdown ? 'none' : 'rotate(180deg)',
+          },
+        })}
+        onClick={() => setIsDropdown(!isDropdown)}
+        rightSection={<IconChevronDown size={24} stroke={1.5} color={'inherit'} />}
+        w="100%"
+        onChange={e => {
+          handleChange({ catalogues: e });
+        }}
         labelProps={{ mb: '8px', fw: '700' }}
       />
-      <Input.Wrapper w='100%'>
+      <Input.Wrapper w="100%">
         <NumberInput
-          onChange={e => handleChange({ payment_from: e })}
+          ref={inputFrom}
+          onChange={e => {
+            setValueFrom(e);
+            handleChange({ payment_from: e });
+          }}
+          value={valueFrom}
           min={0}
           placeholder="От"
           label="Оклад"
-          labelProps={{ mb: '8px', fw:'700' }}
+          labelProps={{ mb: '8px', fw: '700' }}
           mb="8px"
           w="100%"
           data-elem="salary-from-input"
         />
         <NumberInput
-          onChange={e => handleChange({ payment_to: e })}
+          ref={inputTo}
+          onChange={e => {
+            setValueTo(e);
+            handleChange({ payment_to: e });
+          }}
+          value={valueTo}
           min={0}
           placeholder="До"
           labelProps={{ mb: '8px' }}

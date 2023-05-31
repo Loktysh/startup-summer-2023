@@ -11,11 +11,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         withGlobalStyles
         withNormalizeCSS
         theme={{
-          globalStyles: theme => ([{
-            body: {
-              background: '#F7F7F8',
+          globalStyles: theme => [
+            {
+              body: {
+                background: '#F7F7F8',
+              },
             },
-          }]),
+          ],
           fontFamily: 'Inter',
           colorScheme: 'light',
           white: '#ffffff',
@@ -45,9 +47,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           },
           components: {
             Header: {
-              styles: {
-                root: { borderBottom: 'none' },
-              },
+              styles: theme => ({
+                root: {
+                  borderBottom: 'none',
+                  [theme.fn.smallerThan('ml')]: {
+                    backgroundColor: 'red !important',
+                  },
+                },
+              }),
             },
             Input: {
               styles: theme => ({
@@ -55,6 +62,29 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                   border: `1px solid ${theme.colors.gray[2]}`,
                   placeholderColor: theme.colors.gray[3],
                   fontSize: theme.fontSizes.xs,
+                },
+              }),
+            },
+            NumberInput: {
+              styles: theme => ({
+                rightSection: {
+                  width: '19px',
+                },
+                control: {
+                  width: '12px',
+                  height: '5px',
+                  stroke: theme.colors.gray[3],
+                  strokeWidth: '1',
+                  border: 'none',
+                  '&:not(:disabled):hover': {
+                    backgroundColor: 'transparent',
+                  },
+                },
+                controlUp: {
+                  paddingTop: '7px',
+                },
+                controlDown: {
+                  paddingBottom: '7px',
                 },
               }),
             },
@@ -67,19 +97,27 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               }),
             },
             Button: {
-              styles: theme => ({
+              styles: (theme, { variant }) => ({
                 root: {
                   fontSize: theme.fontSizes.xs,
                   fontWeight: '500',
-                  backgroundColor: theme.colors.blue[5],
+                  color: variant === 'light' ? theme.colors.blue[6] : theme.white,
                   '&:hover': {
-                    backgroundColor: theme.colors.blue[4],
+                    backgroundColor:
+                      variant === 'light' ? theme.colors.blue[3] : theme.colors.blue[4],
                   },
                   '&:active': {
                     backgroundColor: theme.colors.blue[6],
-                  }
-                }
+                  },
+                },
               }),
+            },
+            Pagination: {
+              styles: {
+                dots: {
+                  display: 'none',
+                },
+              },
             },
             Select: {
               styles: theme => ({
@@ -90,9 +128,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                   },
                   '&:selected': {
                     backgroundColor: theme.colors.blue[5],
-                  }
+                  },
                 },
-               
               }),
             },
             Anchor: {
@@ -104,8 +141,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                   '&:hover': {
                     textDecoration: 'none',
                   },
-                }
-              }
+                },
+              },
             },
             Card: {
               styles: theme => ({
@@ -121,7 +158,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           headings: {
             fontFamily: 'Poppins, sans-serif',
             sizes: {
-              h1: { fontSize: '1.5rem', fontWeight: '600', letterSpacing: '-0.02em', lineHeight: '36px' },
+              h1: {
+                fontSize: '1.5rem',
+                fontWeight: '600',
+                letterSpacing: '-0.02em',
+                lineHeight: '36px',
+              },
             },
           },
         }}

@@ -14,6 +14,7 @@ import { VacancyCard } from '../../common/VacancyCard/VacancyCard';
 import { fetchVacancies } from '../../../utils';
 import { defaultSearchParams } from '../../../constants';
 import { ReactComponent as SearchIcon } from '../../../assets/search-icon.svg';
+import { useNavigate } from 'react-router-dom';
 
 const SearchPage = () => {
   const [loading, setLoading] = useState(false);
@@ -21,6 +22,7 @@ const SearchPage = () => {
   const [activePage, setPage] = useState(0);
   const [searchParams, setSearchParams] = useState(defaultSearchParams);
   const [resetComponent, setResetComponent] = useState(false);
+  const navigate = useNavigate();
   const searchInput = useRef(null);
   useEffect(() => {
     handleSearch();
@@ -29,6 +31,9 @@ const SearchPage = () => {
     setLoading(true);
     try {
       const data = await fetchVacancies({ ...searchParams, page: activePage });
+      if (!data.objects.length) {
+        navigate('/empty');
+      }
       setVacanciesData(data);
     } catch (error) {
       console.error('Error:', error);
@@ -43,10 +48,11 @@ const SearchPage = () => {
     setResetComponent(e => !e);
     setSearchParams({ ...defaultSearchParams });
     setPage(0);
+    searchInput.current.value = '';
   };
   return (
     <Container size={'100%'} px={10}>
-      <Flex maw={1116} gap={28} pt={40} mx={'auto'} justify={'space-between'}>
+      <Flex maw={1116} gap={28} pt={40} mx={'auto'} justify={'space-between'} wrap={'wrap'}>
         <SearchFilter
           handleChange={handleChange}
           handleSearch={handleSearch}
@@ -79,8 +85,9 @@ const SearchPage = () => {
                 <Center>
                   <Pagination
                     value={activePage + 1}
-                    onChange={e => setPage(e - 1)}
-                    total={Math.round(vacanciesData.total / 4)}
+                      onChange={e => setPage(e - 1)}
+                      total={Math.round(vacanciesData.total / 4)}
+                      boundaries={0}
                     pt={24}
                   />
                 </Center>

@@ -1,18 +1,17 @@
-import React, { useRef, useState, useEffect, useContext, createContext } from 'react';
-import { TextInput, Button, Pagination, Stack, Loader } from '@mantine/core';
-import SearchFilter from '../../common/SearchFilter/SearchFilter';
+import React, { useState, useEffect } from 'react';
+import { Pagination, Loader, Stack } from '@mantine/core';
 import { VacancyCard } from '../../common/VacancyCard/VacancyCard';
 import { fetchVacancies } from '../../../utils';
 import { getFavouriteVacancies } from '../../../utils/favourites';
-import { NotFound } from '../../common/NotFound/NotFound';
+import { useNavigate } from 'react-router-dom';
 
 const FavouritePage = () => {
   const [loading, setLoading] = useState(false);
   const [activePage, setPage] = useState(1);
   const [vacanciesData, setVacanciesData] = useState(null);
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
-    console.log('rerender');
     const ids = getFavouriteVacancies();
     let params = {};
     params = {
@@ -35,30 +34,31 @@ const FavouritePage = () => {
       console.log(ids);
       ids.forEach((e, i) => (params[`ids[${i}]`] = e));
       fetchData();
+    } else {
+      navigate('/empty');
     }
   }, [activePage]);
-  if (vacanciesData) {
+  if (vacanciesData?.objects) {
     return (
-      <>
+      <Stack spacing={32} pt={40} align="center">
         {loading ? (
           <Loader variant="dots" />
         ) : (
-            <>
-            {vacanciesData.objects &&
+          <>
+            {vacanciesData?.objects &&
               vacanciesData.objects.map((data, i) => <VacancyCard key={i} {...data} />)}
             {vacanciesData.total > 4 && (
               <Pagination
                 value={activePage}
                 onChange={e => setPage(e)}
                 total={Math.round(vacanciesData.total / 4)}
+                mt={50}
               />
             )}
           </>
         )}
-      </>
-    ) 
-  } else {
-      return <NotFound />
+      </Stack>
+    );
   }
 };
 
